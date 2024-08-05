@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "vite": "^5.3.5",
+    "vite-plugin-ruby": "^5.0.0"
+  },
+  "dependencies": {
+    "@inertiajs/vue3": "^1.2.0",
+    "@js-from-routes/client": "^1.0.4",
+    "@js-from-routes/inertia": "^1.10.2",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "pinia": "^2.2.0",
+    "ts-node-dev": "^2.0.0",
+    "vite-plugin-full-reload": "^1.2.0",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vue": "^3.4.35",
+    "vuetify": "^3.6.14"
+  }
+}
