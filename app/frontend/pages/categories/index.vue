@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useCategoryStore } from "../../stores/categoryStore";
+import { useCategoryStore } from "~/stores/categoryStore";
 import { usePage } from "@inertiajs/vue3";
 
 export default defineComponent({
