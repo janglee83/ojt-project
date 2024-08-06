@@ -14,13 +14,14 @@
         <h2 class="text-2xl lg:text-3xl font-bold text-gray-900">
           Sign in to platform
         </h2>
-        <form class="mt-8 space-y-6" action="#">
+        <form class="mt-8 space-y-6" @submit.prevent="handleSubmit">
           <div>
             <label
               for="email"
               class="text-sm font-medium text-gray-900 block mb-2"
-              >Your email</label
             >
+              Your email
+            </label>
             <input
               type="email"
               name="email"
@@ -28,14 +29,23 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
               placeholder="name@company.com"
               required
+              v-model="email"
+              @blur="touched.email = true"
+              :class="{ 'border-red-500': emailError && touched.email }"
             />
+            <span
+              v-if="emailError && touched.email"
+              class="text-red-500 text-sm"
+              >{{ emailError }}</span
+            >
           </div>
           <div>
             <label
               for="password"
               class="text-sm font-medium text-gray-900 block mb-2"
-              >Your password</label
             >
+              Your password
+            </label>
             <input
               type="password"
               name="password"
@@ -43,7 +53,15 @@
               placeholder="••••••••"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
               required
+              v-model="password"
+              @blur="touched.password = true"
+              :class="{ 'border-red-500': passwordError && touched.password }"
             />
+            <span
+              v-if="passwordError && touched.password"
+              class="text-red-500 text-sm"
+              >{{ passwordError }}</span
+            >
           </div>
           <div class="flex items-start">
             <div class="flex items-center h-5">
@@ -53,17 +71,17 @@
                 name="remember"
                 type="checkbox"
                 class="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded"
-                required
+                v-model="remember"
               />
             </div>
             <div class="text-sm ml-3">
-              <label for="remember" class="font-medium text-gray-900"
-                >Remember me</label
-              >
+              <label for="remember" class="font-medium text-gray-900">
+                Remember me
+              </label>
             </div>
-            <a href="#" class="text-sm text-teal-500 hover:underline ml-auto"
-              >Lost Password?</a
-            >
+            <a href="#" class="text-sm text-teal-500 hover:underline ml-auto">
+              Lost Password?
+            </a>
           </div>
           <button
             type="submit"
@@ -73,10 +91,86 @@
           </button>
           <div class="text-sm font-medium text-gray-500">
             Not registered?
-            <a class="text-teal-500 hover:underline">Create account</a>
+            <a href="#" class="text-teal-500 hover:underline">Create account</a>
           </div>
         </form>
       </div>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue';
+import { useUserStore } from '../../stores/user';
+
+export default defineComponent({
+  setup() {
+    const { userAuthLogin, handleLogin } = useUserStore();
+    const email = ref('');
+    const password = ref('');
+    const remember = ref(false);
+    const touched = ref({
+      email: false,
+      password: false,
+    });
+
+    const emailError = computed(() => {
+      if (!email.value) return 'Email is required';
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!regex.test(email.value)) return 'Invalid email format';
+      return '';
+    });
+
+    const passwordError = computed(() => {
+      if (!password.value) return 'Password is required';
+      if (password.value.length < 8)
+        return 'Password must be at least 8 characters long';
+      return '';
+    });
+
+    const handleSubmit = () => {
+      touched.value.email = true;
+      touched.value.password = true;
+
+      if (emailError.value || passwordError.value) {
+        // Handle validation errors
+        console.log('Validation errors:', {
+          email: emailError.value,
+          password: passwordError.value,
+        });
+        return;
+      }
+      console.log({
+        email: email.value,
+        password: password.value,
+        remember: remember.value,
+      });
+      try {
+        handleLogin();
+      } catch (error) {
+        console.log('123');
+      }
+      // Perform login logic here
+    };
+
+    return {
+      email,
+      password,
+      remember,
+      touched,
+      emailError,
+      passwordError,
+      handleSubmit,
+    };
+  },
+});
+</script>
+
+<style scoped>
+.border-red-500 {
+  border-color: #f56565;
+}
+.text-red-500 {
+  color: #f56565;
+}
+</style>

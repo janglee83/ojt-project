@@ -7,16 +7,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'AppLayout',
   setup() {
-    const title = ref('Welcome to My App')
+    const title = ref('Welcome to My App');
 
     return {
       title,
-    }
+    };
   },
-})
+});
 </script>
+
+<style scoped>
+.Vue-Toastification__toast {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 50px;
+  align-items: center;
+}
+</style>
