@@ -1,12 +1,13 @@
-// Import the layout directly for SSR to avoid dynamic imports
+import AppLayout from "./App.vue"; // Import the layout component
 
-// Use import.meta.glob for client-side and import.meta.globEagerDefault for SSR
 const pages = import.meta.env.SSR
-  ? import.meta.globEagerDefault("./pages/**/*.vue")
+  ? import.meta.globEager("./pages/**/*.vue")
   : import.meta.glob("./pages/**/*.vue");
 
 export async function resolvePage(name) {
-  const page = pages[`./pages/${name}.vue`];
+  const page = import.meta.env.SSR
+    ? pages[`./pages/${name}.vue`]
+    : await pages[`./pages/${name}.vue`]();
 
   if (!page) {
     throw new Error(
@@ -16,11 +17,11 @@ export async function resolvePage(name) {
 
   // Assign the layout directly for SSR, otherwise use dynamic import
   if (import.meta.env.SSR) {
-    page.layout = page.layout || Layout;
+    page.layout = AppLayout; // Set the layout to AppLayout for SSR
     return page;
   } else {
-    const resolvedPage = (await page()).default;
-    // resolvedPage.layout = resolvedPage.layout || Layout;
+    const resolvedPage = page.default;
+    resolvedPage.layout = AppLayout; // Set the layout to AppLayout for client-side
     return resolvedPage;
   }
 }

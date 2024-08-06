@@ -2,11 +2,18 @@ source 'https://rubygems.org'
 
 ruby '3.3.4'
 
+gem 'dotenv-rails', '~> 3.1'
+gem 'inertia_rails', '~> 3.2'
+gem 'jsonapi-serializer'
 gem 'mysql2', '~> 0.5'
 gem 'puma', '>= 5.0'
+gem 'rack-cors', '~> 2.0'
 gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
+gem 'rubocop', '~> 1.65'
 gem 'sprockets-rails'
 gem 'tzinfo-data', platforms: %i[windows jruby]
+gem 'vite_rails', '~> 3.0'
+
 
 group :development, :test do
   gem 'debug', platforms: %i[mri windows]
@@ -18,8 +25,5 @@ group :development do
   gem 'js_from_routes', '~> 3.0'
 end
 
-gem 'vite_rails', '~> 3.0'
 
-gem 'inertia_rails', '~> 3.2'
 
-gem "dotenv-rails", "~> 3.1"
